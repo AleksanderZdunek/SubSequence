@@ -15,14 +15,15 @@ void EnumerateSubstrings2(const char string[], const size_t length);
 void EnumerateSubstrings3(const char string[], const size_t length);
 void EnumerateSubstrings4(const char string[], const size_t length);
 void Test_FindString();
+void EnumerateSubstrings5(const char string[], const size_t length);
 //
 
 int main(int argc, char* argv[])
 {
 	std::cout << std::endl;
 	
-	//EnumerateSubstrings4(buffer, buffSize);
-	Test_FindString();
+	std::cout << "Find repeats" << std::endl;
+	EnumerateSubstrings5(buffer, buffSize);
 	
 	std::cout << std::endl;
 	return 0;
@@ -147,5 +148,26 @@ void Test_FindString()
 	std::cout <<  FindString(pattern2, sizeof(pattern2)-1, testString, sizeof(testString)-1) << " Expect: 0" << std::endl;
 	std::cout <<  FindString(pattern3, sizeof(pattern3)-1, testString, sizeof(testString)-1) << " Expect: 1" << std::endl;
 }
-//Next: Now that we are satisfied with the substring enumeration the next step is to search the buffer for repeats of the enumerated substring
+
+/**
+	Continuation on EnumerateSubstring4():
+	
+	Call FindString() on enumerated string, instead of printing it.
+*/
+//TODO: Next: Fix call to FindString to not include the the pattern string in the search string
+void EnumerateSubstrings5(const char string[], const size_t length)
+{
+	const size_t min = 1;
+	const size_t max = length;
+	
+	int n = 0;
+	for(int i=0; i<length-min; i++)
+	{
+		for(int j=i+min-1; j<std::min((length+i)/2, i+max); j++)
+		{
+			if(FindString(string+i, j-i+1, string/*FIXME*/, length)) std::cout << std::string(string+i, j-i+1) << " @ i: " << i << std::endl;
+		}
+	}
+}
+
 //Also: Might want to write substring enumeration based in start index and length instead of start index and stop index. Possibly. 
