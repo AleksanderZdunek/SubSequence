@@ -3,6 +3,7 @@
 #include <string>
 #include <iomanip>
 #include <algorithm>
+#include <cstddef>
 
 const char buffer[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 //const char buffer[] = "ABCDEF";
@@ -13,13 +14,15 @@ void EnumerateSubstrings(const char string[], const size_t length);
 void EnumerateSubstrings2(const char string[], const size_t length);
 void EnumerateSubstrings3(const char string[], const size_t length);
 void EnumerateSubstrings4(const char string[], const size_t length);
+void Test_FindString();
 //
 
 int main(int argc, char* argv[])
 {
 	std::cout << std::endl;
 	
-	EnumerateSubstrings4(buffer, buffSize);
+	//EnumerateSubstrings4(buffer, buffSize);
+	Test_FindString();
 	
 	std::cout << std::endl;
 	return 0;
@@ -100,5 +103,49 @@ void EnumerateSubstrings4(const char string[], const size_t length)
 	} 
 }
 
+/**
+	Compare the first *length* elements of strings pointed to by *s1* and *s2*
+	
+	\param s1 pointer to a string
+	\param s2 pointer to a string
+	\return true if the elements of strings are equal
+*/
+bool StringCompare(const char* s1, const char* s2, size_t length)
+{
+	for(int i=0; i<length; i++) if(s1[i] != s2[i]) return false;
+	return true;
+}
+
+/**
+	Detects if a pettern appears as a substring of a string
+	
+	\param pattern pointer to a pattern string
+	\param patternLength length of pattern string. patternLength shall not exceed stringLength
+	\param string pointer to string to search for substrings in
+	\param stringLength length of string
+	
+	Note: Searches for substring by iterating over every substring with pattern length.
+	This funstion is a candidate for improvement with a better substring search algorithm. 
+*/
+bool FindString(const char* pattern, const size_t patternLength, const char* string, const size_t stringLength)
+{
+	for(size_t i=0; i <= stringLength-patternLength; i++)
+	{
+		if(StringCompare(pattern, string+i, patternLength)) return true;
+	}
+	return false;
+}
+
+void Test_FindString()
+{
+	char testString[] = "0123456789";
+	char pattern[] = "6789";
+	char pattern2[] ="7890";
+	char pattern3[] = "0123456789";
+	
+	std::cout <<  FindString(pattern, sizeof(pattern)-1, testString, sizeof(testString)-1) << " Expect: 1" << std::endl;
+	std::cout <<  FindString(pattern2, sizeof(pattern2)-1, testString, sizeof(testString)-1) << " Expect: 0" << std::endl;
+	std::cout <<  FindString(pattern3, sizeof(pattern3)-1, testString, sizeof(testString)-1) << " Expect: 1" << std::endl;
+}
 //Next: Now that we are satisfied with the substring enumeration the next step is to search the buffer for repeats of the enumerated substring
 //Also: Might want to write substring enumeration based in start index and length instead of start index and stop index. Possibly. 
